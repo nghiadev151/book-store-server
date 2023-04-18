@@ -13,7 +13,7 @@ public interface CartService {
 
     public Cart getCartById(Long id);
 
-    public void addToCart(Long cartId, Long productId, Integer quantity);
+    public Cart addToCart(Integer userId, Long productId, Integer quantity);
 
     public void removeFromCart(Long cartItemId);
 }

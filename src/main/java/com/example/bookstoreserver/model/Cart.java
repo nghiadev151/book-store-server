@@ -72,4 +72,11 @@ public class Cart {
                     .sum();
         }
 
+    public CartItem getCartItemByProductId(Long productId) {
+        return this.cartItems
+                .stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst()
+                .orElse(null);
+    }
 }

@@ -1,9 +1,9 @@
 package com.example.bookstoreserver.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 
@@ -15,10 +15,13 @@ public class User {
     private String password;
     private String fullName;
     private String email;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cart> carts = new ArrayList<>(); // thêm thuộc tính carts
 
-    public User(){
+    public User() {
 
     }
+
     public int getId() {
         return id;
     }
@@ -58,4 +61,14 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public List<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<Cart> carts) {
+        this.carts = carts;
+    }
 }
+
+
