@@ -1,5 +1,6 @@
 package com.example.bookstoreserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 @Entity
 @Table(name = "cart_item")
@@ -8,11 +9,12 @@ public class CartItem {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne()
         @JoinColumn(name = "cart_id", nullable = false)
+        @JsonIgnore
         private Cart cart;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne()
         @JoinColumn(name = "product_id", nullable = false)
         private Product product;
 

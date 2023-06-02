@@ -1,31 +1,30 @@
-package com.example.bookstoreserver.model;
+package com.example.bookstoreserver.dto.user;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Getter
+@Setter
+public class UserDto {
     private Long id;
     private String username;
-    private String password;
     private String fullName;
     private String email;
     private String roles;
-//    private Long cartId;
-    @OneToOne( cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
 
+    public UserDto(Long id, String username, String fullName, String email, String roles) {
+        this.id = id;
+        this.username = username;
+        this.fullName = fullName;
+        this.email = email;
+        this.roles = roles;
+    }
+
+    public UserDto() {
+
+    }
 
     public Long getId() {
         return id;
@@ -41,14 +40,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFullName() {
@@ -74,22 +65,4 @@ public class User {
     public void setRoles(String roles) {
         this.roles = roles;
     }
-
-//    public Long getCartId() {
-//        return cartId;
-//    }
-//
-//    public void setCartId(Long cartId) {
-//        this.cartId = cartId;
-//    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
 }
-
-

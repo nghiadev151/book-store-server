@@ -1,5 +1,7 @@
 package com.example.bookstoreserver.service;
 
+import com.example.bookstoreserver.dto.cart.CartDto;
+import com.example.bookstoreserver.dto.cart.CartRequest;
 import com.example.bookstoreserver.model.Cart;
 import com.example.bookstoreserver.model.CartItem;
 import com.example.bookstoreserver.model.Product;
@@ -8,12 +10,14 @@ import com.example.bookstoreserver.repositories.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface CartService {
 
-    public Cart getCartById(Long id);
-
-    public Cart addToCart(Integer userId, Long productId, Integer quantity);
+    public CartDto getCartByUserId(String token);
+public void updateQuantity(Long userId, Long productId, Integer quantity);
+    public void addToCart(Long userId, Long productId, Integer quantity);
 
     public void removeFromCart(Long cartItemId);
 }
