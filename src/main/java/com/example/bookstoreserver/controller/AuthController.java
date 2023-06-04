@@ -7,6 +7,7 @@ import com.example.bookstoreserver.dto.user.RegisterRequest;
 import com.example.bookstoreserver.model.Token;
 import com.example.bookstoreserver.model.User;
 import com.example.bookstoreserver.repositories.TokenRepository;
+import com.example.bookstoreserver.repositories.UserRepository;
 import com.example.bookstoreserver.service.TokenService;
 import com.example.bookstoreserver.service.serviceImpl.JwtService;
 import com.example.bookstoreserver.service.serviceImpl.TokenServiceImpl;
@@ -36,6 +37,8 @@ public class AuthController {
     private UserServiceImpl userService;
     @Autowired
     private TokenRepository tokenRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
 private UserInfoUserDetailsService userInfoUserDetailsService;
@@ -43,10 +46,9 @@ private UserInfoUserDetailsService userInfoUserDetailsService;
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
 //         Kiểm tra xem username đã tồn tại hay chưa
-        if (userInfoUserDetailsService.loadUserByUsername(user.getUsername()) != null) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username is already taken");
         }
-
         // Lưu người dùng mới vào cơ sở dữ liệu
         userService.saveUser(user);
 
@@ -75,7 +77,7 @@ private UserInfoUserDetailsService userInfoUserDetailsService;
         return ResponseEntity.ok("Logout successful.");
     }
     @PostMapping("/refresh-token")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        tokenService.refreshToken(request, response);
+    public ResponseEntity<AuthenticationResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        return ResponseEntity.ok(tokenService.refreshToken(request, response));
     }
 }

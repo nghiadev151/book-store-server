@@ -44,12 +44,13 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String authHeader = request.getHeader("Authorization");
         final String refreshToken;
         final String username;
+        AuthenticationResponse authenticationResponse = null;
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            return;
+            return null;
         }
         refreshToken = authHeader.substring(7);
         username = jwtService.extractUsername(refreshToken);
@@ -62,12 +63,13 @@ public class TokenServiceImpl implements TokenService {
                 User user = userRepository.findByUsername(username).orElseThrow();
                 this.saveRefreshToken(user, newRefreshToken);
                 String newToken = jwtService.generateToken(username);
-                AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+                authenticationResponse = new AuthenticationResponse();
                 authenticationResponse.setAccessToken(newToken);
                 authenticationResponse.setRefreshToken(newRefreshToken);
-                new ObjectMapper().writeValue(response.getOutputStream(), authenticationResponse);
+                
             }
         }
+        return authenticationResponse;
     }
 
     @Override

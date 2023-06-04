@@ -55,11 +55,19 @@ public class ProductServiceImpl implements ProductService {
 
         Category category = categoryRepository.findById(productRequest.getCategoryId())
                 .orElseThrow(() -> new NotFoundException("Category not found with ID: " + productRequest.getCategoryId()));
-        Publisher publisher = publisherRepository.findById(productRequest.getPublisherId())
-                .orElseThrow(() -> new NotFoundException("Publisher not found with ID: " + productRequest.getPublisherId()));
-        Author author = authorRepository.findById(productRequest.getAuthorId())
-                .orElseThrow(() -> new NotFoundException("Author not found with ID: " + productRequest.getAuthorId()));
+        Publisher publisher = publisherRepository.findByName(productRequest.getPublisher());
+        Author author = authorRepository.findByName(productRequest.getAuthor());
+        if(author == null ){
+            Author author1 = new Author();
+            author1.setName(productRequest.getAuthor());
+            authorRepository.save(author1);
 
+        }
+        if(publisher == null){
+            Publisher newPublisher = new Publisher();
+            newPublisher.setName(productRequest.getPublisher());
+            publisherRepository.save(newPublisher);
+        }
         product.setCategory(category);
         product.setPublisher(publisher);
         product.setAuthor(author);

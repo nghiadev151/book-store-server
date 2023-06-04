@@ -5,6 +5,7 @@ import com.example.bookstoreserver.model.Author;
 import com.example.bookstoreserver.model.Product;
 import com.example.bookstoreserver.model.Publisher;
 import com.example.bookstoreserver.repositories.AuthorRepository;
+import com.example.bookstoreserver.repositories.ProductRepository;
 import com.example.bookstoreserver.repositories.PublisherRepository;
 import com.example.bookstoreserver.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class ProductController {
 public PublisherRepository publisherRepository;
 @Autowired
 public AuthorRepository authorRepository;
+
     private final ProductService productService;
 @Autowired
     public ProductController(ProductService productService) {
@@ -33,11 +35,12 @@ public AuthorRepository authorRepository;
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> createProduct (@RequestBody ProductRequest productRequest){
+
         productService.saveProduct(productRequest);
         return ResponseEntity.ok("Successfully");
     }
     @GetMapping
-    public ResponseEntity<Page<Product>> getAllProduct(@RequestParam(defaultValue = "1") int page,
+    public ResponseEntity<Page<Product>> getAllProduct(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page,size);
         return ResponseEntity.ok(productService.getAllProduct(pageable));
@@ -55,9 +58,14 @@ public AuthorRepository authorRepository;
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> updateProductById(@PathVariable Long id, @RequestBody ProductRequest productRequest){
-        productService.updateProduct(id, productRequest);
-        return ResponseEntity.ok("Update product successfully");
+    public ResponseEntity<?> updateProductById(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
+        try {
+            productService.updateProduct(id, productRequest);
+            return ResponseEntity.ok("Update product successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Update failed");
+        }
+
     }
     @GetMapping("/search")
     public List<Product> searchProductsByName(@RequestParam("name") String name) {

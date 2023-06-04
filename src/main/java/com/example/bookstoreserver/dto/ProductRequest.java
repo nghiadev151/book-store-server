@@ -12,22 +12,10 @@ public class ProductRequest {
     private String image;
     private Integer quantity;
     private Long categoryId;
-    private Long publisherId;
-    private Long authorId;
+    private String publisher;
+    private String author;
 
 
-    public ProductRequest(String name, String description, Double price, String image, Integer quantity, Long categoryId, Long publisherId, Long authorId) {
-
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.image = image;
-        this.quantity = quantity;
-        this.categoryId = categoryId;
-        this.publisherId= publisherId;
-        this.authorId = authorId;
-
-    }
 
     public ProductRequest() {
     }
@@ -82,19 +70,19 @@ public class ProductRequest {
         this.categoryId = categoryId;
     }
 
-    public Long getPublisherId() {
-        return publisherId;
+    public String getPublisher() {
+        return publisher;
     }
 
-    public void setPublisherId(Long publisherId) {
-        this.publisherId = publisherId;
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
     }
 
-    public Long getAuthorId() {
-        return authorId;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

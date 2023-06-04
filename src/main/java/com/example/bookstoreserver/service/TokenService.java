@@ -14,7 +14,7 @@ import java.io.IOException;
 public interface TokenService {
     public  void saveRefreshToken(User user, String refreshToken);
 
-    void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
     public AuthenticationResponse register(RegisterRequest registerRequest);
     public AuthenticationResponse authenticate(LoginRequest loginRequest);
 }
