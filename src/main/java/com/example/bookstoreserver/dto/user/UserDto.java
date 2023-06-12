@@ -1,5 +1,6 @@
 package com.example.bookstoreserver.dto.user;
 
+import com.example.bookstoreserver.model.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,14 +14,9 @@ public class UserDto {
     private String fullName;
     private String email;
     private String roles;
+    private Cart cart;
 
-    public UserDto(Long id, String username, String fullName, String email, String roles) {
-        this.id = id;
-        this.username = username;
-        this.fullName = fullName;
-        this.email = email;
-        this.roles = roles;
-    }
+
 
     public UserDto() {
 
@@ -64,5 +60,13 @@ public class UserDto {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

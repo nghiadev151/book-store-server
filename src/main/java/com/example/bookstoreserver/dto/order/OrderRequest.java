@@ -1,16 +1,22 @@
 package com.example.bookstoreserver.dto.order;
 
-public class OrderRequest {
-    private String address;
-    private String phone;
-    private double totalPrice;
-    private Long userId;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-    public OrderRequest(String address, String phone, double totalPrice, Long userId) {
+public class OrderRequest {
+    @NotBlank(message = "Address should´t be null or empty")
+    private String address;
+    @NotBlank(message = "Phone should´t be null or empty")
+    private String phone;
+    @NotNull(message = "Total price should´t be null or empty")
+    private double totalPrice;
+
+
+    public OrderRequest(String address, String phone, double totalPrice) {
         this.address = address;
         this.phone = phone;
         this.totalPrice = totalPrice;
-        this.userId = userId;
+
     }
 
     public OrderRequest() {
@@ -40,11 +46,5 @@ public class OrderRequest {
         this.totalPrice = totalPrice;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 }

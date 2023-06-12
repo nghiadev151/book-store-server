@@ -4,15 +4,26 @@ import com.example.bookstoreserver.model.Category;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductRequest {
+
+    @NotBlank(message = "Product name should´t be null or empty")
     private String name;
+    @NotBlank(message = "Description should´t be null or empty")
     private String description;
+    @NotNull(message = "Price should´t be null or empty")
     private Double price;
+    @NotBlank(message = "Image should´t be null or empty")
     private String image;
+    @NotNull(message = "Quantity should´t be null or empty")
     private Integer quantity;
+    @NotNull(message = "Category should´t be null or empty")
     private Long categoryId;
+    @NotBlank(message = "Publisher should´t be null or empty")
     private String publisher;
+    @NotBlank(message = "Author should´t be null or empty")
     private String author;
 
 

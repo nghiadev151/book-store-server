@@ -16,6 +16,7 @@ public interface ProductService {
     public Product getProductById(Long productId);
     public Product saveProduct(ProductRequest productRequest);
     public Page<Product> getAllProduct(Pageable pageable);
+    public List<Product> getAll();
     public void deleteProductById(Long productId);
     public Product updateProduct(Long id, ProductRequest productRequest);
     List<Product> getBestSeller();

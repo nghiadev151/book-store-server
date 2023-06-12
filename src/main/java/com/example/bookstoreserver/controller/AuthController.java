@@ -1,9 +1,12 @@
 package com.example.bookstoreserver.controller;
 
+import com.example.bookstoreserver.Validator;
 import com.example.bookstoreserver.config.UserInfoUserDetailsService;
 import com.example.bookstoreserver.dto.user.AuthenticationResponse;
 import com.example.bookstoreserver.dto.user.LoginRequest;
 import com.example.bookstoreserver.dto.user.RegisterRequest;
+import com.example.bookstoreserver.exception.CustomExceptionHandler;
+import com.example.bookstoreserver.exception.UserException;
 import com.example.bookstoreserver.model.Token;
 import com.example.bookstoreserver.model.User;
 import com.example.bookstoreserver.repositories.TokenRepository;
@@ -14,6 +17,7 @@ import com.example.bookstoreserver.service.serviceImpl.TokenServiceImpl;
 import com.example.bookstoreserver.service.serviceImpl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,9 +25,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @RestController
@@ -39,25 +45,54 @@ public class AuthController {
     private TokenRepository tokenRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    public Validator validator;
+    @Autowired
+    private CustomExceptionHandler customExceptionHandler;
+
+
 
     @Autowired
 private UserInfoUserDetailsService userInfoUserDetailsService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid User user, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            List<String> errorMessage = validator.getErrorMessage(bindingResult);
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
 //         Kiểm tra xem username đã tồn tại hay chưa
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username is already taken");
         }
-        // Lưu người dùng mới vào cơ sở dữ liệu
-        userService.saveUser(user);
+        try {
+            userService.saveUser(user);
 
-        // Trả về thông báo thành công
-        return ResponseEntity.ok("User registered successfully");
+            // Trả về thông báo thành công
+            return ResponseEntity.ok("User registered successfully");
+
+        }catch (UserException ex){
+            return customExceptionHandler.handleUserException(ex);
+        }
+
     }
+    @PostMapping
+    public ResponseEntity<?> checkUserExists(@RequestBody String username){
+        try{
 
+            if(userInfoUserDetailsService.loadUserByUsername(username)!=null);
+            return ResponseEntity.ok("User is exists");
+        }catch (UsernameNotFoundException ex){
+            return ResponseEntity.ok("User not found");
+        }
+
+    }
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticateAndGetToken(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateAndGetToken(@RequestBody @Valid LoginRequest loginRequest, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            List<String> errorMessage = validator.getErrorMessage(bindingResult);
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
        return ResponseEntity.ok(tokenService.authenticate(loginRequest)) ;
     }
     @PostMapping("/logout")

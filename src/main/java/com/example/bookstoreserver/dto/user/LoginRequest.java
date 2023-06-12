@@ -1,5 +1,7 @@
 package com.example.bookstoreserver.dto.user;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +9,10 @@ import lombok.NoArgsConstructor;
 
 public class LoginRequest {
 
+    @NotBlank(message = "Username should´t be null or empty")
     private String username ;
+    @NotBlank(message = "Password should´t be null or empty")
+    @Size(min= 4, max=8)
     private String password;
 
     public LoginRequest(String username, String password) {

@@ -21,6 +21,7 @@ public class UserMapper {
         tmp.setUsername(user.getUsername());
         tmp.setEmail(user.getEmail());
         tmp.setRoles(user.getRoles());
+        tmp.setCart(user.getCart());
 
         return tmp;
     }

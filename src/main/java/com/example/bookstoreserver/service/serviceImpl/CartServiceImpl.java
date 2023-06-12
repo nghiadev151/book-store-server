@@ -2,6 +2,7 @@ package com.example.bookstoreserver.service.serviceImpl;
 
 import com.example.bookstoreserver.dto.cart.CartDto;
 import com.example.bookstoreserver.dto.cart.CartItemDto;
+import com.example.bookstoreserver.exception.NotFoundException;
 import com.example.bookstoreserver.exception.ResourceNotFoundException;
 import com.example.bookstoreserver.model.Cart;
 import com.example.bookstoreserver.model.CartItem;
@@ -13,6 +14,7 @@ import com.example.bookstoreserver.repositories.ProductRepository;
 import com.example.bookstoreserver.repositories.UserRepository;
 import com.example.bookstoreserver.service.CartService;
 import com.example.bookstoreserver.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,29 +37,39 @@ public class CartServiceImpl implements CartService {
     private  UserRepository userRepository;
 
     @Override
-    public CartDto getCartByUserId(String token) {
-        String username = jwtService.extractUsername(token);
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-       Cart cart =  user.getCart();
-       List<CartItemDto> cartItems = new ArrayList<>();
-       double totalCost = 0;
-        for (CartItem c: cart.getCartItems()) {
-            CartItemDto cartItemDto = new CartItemDto(c);
-            totalCost += cartItemDto.getQuantity() * c.getProduct().getPrice();
-            cartItems.add(cartItemDto);
+    public CartDto getCartByUserId(HttpServletRequest request) {
+        final String authHeader = request.getHeader("Authorization");
+        final String token;
+        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+            return null;
         }
-        CartDto cartDto =new CartDto();
-        cartDto.setTotalCost(totalCost);
-        cartDto.setCartItems(cartItems);
-        System.out.println(cartDto.getTotalCost());
-       return cartDto;
+        token = authHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("User not found"));
+       Cart cart =  user.getCart();
+       if(cart == null){
+           return null;
+       }else{
+           List<CartItemDto> cartItems = new ArrayList<>();
+           double totalCost = 0;
+           for (CartItem c: cart.getCartItems()) {
+               CartItemDto cartItemDto = new CartItemDto(c);
+               totalCost += cartItemDto.getQuantity() * c.getProduct().getPrice();
+               cartItems.add(cartItemDto);
+           }
+           CartDto cartDto =new CartDto();
+           cartDto.setTotalCost(totalCost);
+           cartDto.setCartItems(cartItems);
+           return cartDto;
+       }
+
     }
     @Override
     public void addToCart(Long userId, Long productId, Integer quantity) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+                .orElseThrow(() -> new NotFoundException("Product not found"));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
         Cart cart = user.getCart();
 
 
@@ -82,7 +94,7 @@ public class CartServiceImpl implements CartService {
             cartItem.setQuantity(quantity);
             cart.addCartItem(cartItem);
         } else {
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
         }
         cartItemRepository.save(cartItem);
         cartRepository.save(cart);
@@ -92,7 +104,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void updateQuantity(Long userId, Long productId, Integer quantity){
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
         Cart cart = user.getCart();
         CartItem cartItem = cart.getCartItemByProductId(productId);
         cartItem.setQuantity(quantity);
@@ -101,7 +113,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void removeFromCart(Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new ResourceNotFoundException("CartItem not found"));
+                .orElseThrow(() -> new NotFoundException("CartItem not found"));
         Cart cart = cartItem.getCart();
         cart.removeCartItem(cartItem);
         cartRepository.save(cart);

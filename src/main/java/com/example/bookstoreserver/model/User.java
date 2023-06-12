@@ -1,9 +1,14 @@
 package com.example.bookstoreserver.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +21,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Username should´t be null or empty")
     private String username;
+    @NotBlank(message = "Password should´t be null or empty")
+
     private String password;
+    @NotBlank(message = "Full name should´t be null or empty")
     private String fullName;
+    @NotBlank(message = "Email should´t be null or empty")
+    @Email(message = "invalid email")
     private String email;
+    @NotNull(message = "Role should´t be null")
     private String roles;
 //    private Long cartId;
     @OneToOne( cascade = CascadeType.ALL)

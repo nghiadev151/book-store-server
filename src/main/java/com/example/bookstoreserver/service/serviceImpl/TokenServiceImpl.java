@@ -5,6 +5,7 @@ import com.example.bookstoreserver.dto.user.AuthenticationResponse;
 import com.example.bookstoreserver.dto.user.LoginRequest;
 import com.example.bookstoreserver.dto.user.RegisterRequest;
 import com.example.bookstoreserver.exception.NotFoundException;
+import com.example.bookstoreserver.exception.UserException;
 import com.example.bookstoreserver.model.Token;
 import com.example.bookstoreserver.model.User;
 import com.example.bookstoreserver.repositories.TokenRepository;
@@ -72,11 +73,6 @@ public class TokenServiceImpl implements TokenService {
         return authenticationResponse;
     }
 
-    @Override
-    public AuthenticationResponse register(RegisterRequest registerRequest) {
-
-        return null;
-    }
 
     @Override
     public AuthenticationResponse authenticate(LoginRequest loginRequest) {
@@ -91,8 +87,7 @@ public class TokenServiceImpl implements TokenService {
             auth.setRefreshToken(refreshToken);
            return auth;
         } else {
-
-            throw new UsernameNotFoundException("invalid user request !");
+            throw new UserException("invalid user request!");
         }
     }
 }

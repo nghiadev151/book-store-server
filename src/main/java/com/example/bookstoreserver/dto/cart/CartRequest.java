@@ -1,7 +1,11 @@
 package com.example.bookstoreserver.dto.cart;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CartRequest {
+
     private Long productId;
+
     private int quantity;
 
     public Long getProductId() {

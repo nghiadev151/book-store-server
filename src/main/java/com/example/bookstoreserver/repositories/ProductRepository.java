@@ -25,7 +25,7 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
     Product save(Product product);
 
     Optional<Product> findById(Long productId);
-
+    List<Product> findAll();
     Page<Product> findAll(Pageable pageable);
     List<Product> findTop10ByOrderBySalesDesc();
     List<Product> findTop10ByOrderByCreatedAtDesc();

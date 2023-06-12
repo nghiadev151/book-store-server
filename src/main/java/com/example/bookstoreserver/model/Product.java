@@ -1,6 +1,7 @@
 package com.example.bookstoreserver.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 
@@ -10,12 +11,19 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String name;
+    @NotNull
     private String description;
+    @NotNull
     private Double price;
+    @NotNull
     private String image;
+    @NotNull
     private Integer quantity;
+    @NotNull
     private Integer sales;
+    @NotNull
     private Date createdAt;
     @ManyToOne()
     @JoinColumn(name = "category_id")
