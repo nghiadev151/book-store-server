@@ -117,27 +117,21 @@ private final ProductService productService;
         }catch (ProductException ex){
             return customExceptionHandler.handleProductException(ex);
         }
-
-
     }
     @GetMapping("/search")
     public ResponseEntity<?> searchProductsByName(@RequestParam("name") String name) {
         try{
             return ResponseEntity.ok(productService.search(name));
-        }catch (ProductException ex){
-            return customExceptionHandler.handleProductException(ex);
         }catch (NotFoundException ex){
             return customExceptionHandler.handleNotFoundException(ex);
         }
-
-
     }
     @GetMapping("/filter")
     public ResponseEntity<?> filterProducts(@RequestParam(value = "publisher", required = false) String publisherName,
                                         @RequestParam(value = "author", required = false) String authorName,
                                         @RequestParam(value = "minPrice", required = false) Double minPrice,
                                         @RequestParam(value = "maxPrice", required = false) Double maxPrice) {
-    try {
+
         Publisher publisher = null;
         Author author = null;
 
@@ -150,11 +144,7 @@ private final ProductService productService;
         }
 
         return ResponseEntity.ok(productService.filterProducts(publisher, author, minPrice, maxPrice));
-    }catch (ProductException ex){
-        return customExceptionHandler.handleProductException(ex);
-    }catch (NotFoundException ex){
-        return customExceptionHandler.handleNotFoundException(ex);
-    }
+
 
     }
     @GetMapping("/new-arrivals")

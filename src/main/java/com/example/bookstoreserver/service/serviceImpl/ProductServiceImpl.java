@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductById(Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Product not found with id "+productId));
     }
-//them product
+
     @Override
     public Product saveProduct(ProductRequest productRequest) {
     try {
@@ -145,14 +145,13 @@ public class ProductServiceImpl implements ProductService {
         try {
             return productRepository.findByNameContaining(name);
         }catch (ProductException ex){
-            throw new ProductException("An error occurred during the search");
+            throw new NotFoundException("not found products with key: " + name);
         }
-
     }
 //loc
     @Override
     public List<Product> filterProducts(Publisher publisher, Author author, Double minPrice, Double maxPrice) {
-        try {
+
             Specification<Product> spec = Specification.where(null);
 
             if (publisher != null) {
@@ -172,9 +171,7 @@ public class ProductServiceImpl implements ProductService {
             }
 
             return productRepository.findAll(spec);
-        }catch (ProductException ex){
-           throw new ProductException("An error occurred during filtering");
-        }
+
 
     }
 
