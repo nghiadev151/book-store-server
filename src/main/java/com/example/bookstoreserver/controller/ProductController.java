@@ -27,15 +27,12 @@ import java.util.List;
 @RestController//xác định controller là mộp restfulcontroller
 @RequestMapping("/api/products") //tất cả các yêu cầu đến url nà đều được xl bằng controller này.
 public class ProductController {
-<<<<<<< Updated upstream
+
     @Autowired
     private Validator validator;
     @Autowired
     private CustomExceptionHandler customExceptionHandler;
 @Autowired
-=======
-@Autowired //tự động thêm vào srping framework
->>>>>>> Stashed changes
 public PublisherRepository publisherRepository;
 @Autowired//TỰ ĐỘNG ẾT NỐI CÁC DEPENDENCY VÀO CÁC THÀ VIÊ CLASS.
 public AuthorRepository authorRepository;
@@ -106,15 +103,12 @@ private final ProductService productService;
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-<<<<<<< Updated upstream
     public ResponseEntity<?> updateProductById(@PathVariable Long id, @RequestBody @Valid ProductRequest productRequest, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             List<String> errorMessage = validator.getErrorMessage(bindingResult);
             return ResponseEntity.badRequest().body(errorMessage);
         }
-=======
-    public ResponseEntity<?> updateProductById(@PathVariable Long id, @RequestBody ProductRequest productRequest) {//nhận giá trị của đió tượng thông qua phần thân của requesbody
->>>>>>> Stashed changes
+
         try {
             productService.updateProduct(id, productRequest);
             return ResponseEntity.ok("Update product successfully");
@@ -127,7 +121,6 @@ private final ProductService productService;
 
     }
     @GetMapping("/search")
-<<<<<<< Updated upstream
     public ResponseEntity<?> searchProductsByName(@RequestParam("name") String name) {
         try{
             return ResponseEntity.ok(productService.search(name));
@@ -137,10 +130,7 @@ private final ProductService productService;
             return customExceptionHandler.handleNotFoundException(ex);
         }
 
-=======
-    public List<Product> searchProductsByName(@RequestParam("name") String name) {
-    return productService.search(name);
->>>>>>> Stashed changes
+
     }
     @GetMapping("/filter")
     public ResponseEntity<?> filterProducts(@RequestParam(value = "publisher", required = false) String publisherName,

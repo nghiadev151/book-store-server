@@ -142,17 +142,12 @@ public class ProductServiceImpl implements ProductService {
 //tim kiem
     @Override
     public List<Product> search(String name) {
-<<<<<<< Updated upstream
         try {
             return productRepository.findByNameContaining(name);
         }catch (ProductException ex){
             throw new ProductException("An error occurred during the search");
         }
 
-
-=======
-        return productRepository.findByNameContaining(name);
->>>>>>> Stashed changes
     }
 //loc
     @Override
