@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
     public Product getProductById(Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Product not found with id "+productId));
     }
-
+//them product
     @Override
     public Product saveProduct(ProductRequest productRequest) {
     try {
@@ -82,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
 
         return productRepository.save(product);
     }
-
+//lay ra tat ca san pham
     @Override
     public Page<Product> getAllProduct(Pageable pageable) {
         try {
@@ -92,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
     }
-
+//xoa sp
     @Override
     public List<Product> getAll(){
         return productRepository.findAll();
@@ -108,7 +108,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     }
-
+//cap nhat san pham
     @Override
     public Product updateProduct(Long id, ProductRequest productRequest) {
         try {
@@ -139,9 +139,10 @@ public class ProductServiceImpl implements ProductService {
         }
 
     }
-
+//tim kiem
     @Override
     public List<Product> search(String name) {
+<<<<<<< Updated upstream
         try {
             return productRepository.findByNameContaining(name);
         }catch (ProductException ex){
@@ -149,8 +150,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
 
+=======
+        return productRepository.findByNameContaining(name);
+>>>>>>> Stashed changes
     }
-
+//loc
     @Override
     public List<Product> filterProducts(Publisher publisher, Author author, Double minPrice, Double maxPrice) {
         try {
