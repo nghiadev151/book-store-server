@@ -51,7 +51,7 @@ public class CartController {
 
         CartDto cartDto = this.cartService.getCartByUserId(request);
         if(cartDto==null){
-            return ResponseEntity.status(400).build();
+            return null;
         }
                return ResponseEntity.ok(cartDto);
     }
