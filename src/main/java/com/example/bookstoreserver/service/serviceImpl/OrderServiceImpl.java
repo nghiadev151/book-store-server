@@ -13,10 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -61,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
                     product.setSales(product.getSales() + od.getQuantity());
                     productRepository.save(product);
                     orderDetailRepository.save(orderDetail);
+
                 }
             }
             user.setCart(null);

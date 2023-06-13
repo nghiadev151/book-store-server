@@ -68,7 +68,6 @@ private final ProductService productService;
     try{
         Pageable pageable = PageRequest.of(page,size);
         Page<Product> product = productService.getAllProduct(pageable);
-        long totalProduct = product.getTotalElements();
         return ResponseEntity.ok(product);
     }catch (ProductException ex){
         return customExceptionHandler.handleProductException(ex);

@@ -93,10 +93,10 @@ public class ProductServiceImpl implements ProductService {
 
     }
 //xoa sp
-    @Override
-    public List<Product> getAll(){
-        return productRepository.findAll();
-    }
+//    @Override
+//    public List<Product> getAll(){
+//        return productRepository.findAll();
+//    }
     @Override
     public void deleteProductById(Long productId) {
         try{
